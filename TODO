@@ -1,0 +1,18 @@
+
+* Claen up time-local programs including lineshape, dm3pes, and dynamics.
+
+lib/
+
+  * Integrate bath functions and shared variables; 
+    maybe using a bath_class wrapper? --- partially done.
+  * More parameterizations for the js03art bath. 
+
+src/
+
+  * adding Hren seems to solve problems of incorrect long-time 
+    dynamics mostly; however, in some cases the violation of
+    positivity still occurs. Maybe: better fit to C(t)?
+  * poptrans/site_poptrans involving two states that have energy
+    cross-over due to static disorder is unphysical... a warnning 
+    message should be given...
+

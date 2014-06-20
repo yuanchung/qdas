@@ -1,0 +1,65 @@
+#
+# Example parameter file for lineshape package.
+#
+
+# This format is free style and case insensitive.
+#
+# Use '#' to comment your key file, anything 
+# after '#' is treated as comments, i.e. ignored.
+
+#
+# Simple two-level system
+#
+
+# Size of the system; this has to be given at the 
+# beginning of the parameter file.
+
+NSIZE 2
+
+# Hamiltonian, notice that matrix-type input is used here
+# Also, the ground state is included, and the RWA is applied
+Hamiltonian Matrix
+0.0	0.0
+0.0	600.0
+END
+
+Dipole
+# |mu|   X     Y       Z
+0.0	0.0	0.0	0.0
+1.0     1.0	0.0	0.0
+END
+
+# Std. Dev. of Gaussian Static disorder
+# Diagonal energetic disorder on each site
+Disorder Assign
+2       2       30
+END
+
+# Number of Monte-Carlo sampling iterations
+NITER 200
+
+# Bath conditions;
+Beta 0.018685 # inverse temperature, 77K
+
+# Assign spectral function for each site
+Bath MT99ART
+# |n><m| Lambda0 Omega0 Gamma0
+2 2  50.0   50.0   100.0 
+END
+
+
+# Pulse sequence
+# E0 tau0 delta w0
+PULSESEQ
+1.0   TAU1.0 40 600
+1.0   TAU2.0 40 600
+1.0   TAU3.0 40 600
+END
+
+
+# Dynamics related keywords
+TSTOP 2000.0
+## 0.1 fs seems to work well; sometimes up to 1 fs is ok too.
+TSTEP 0.2
+TPRINT 500.0
+

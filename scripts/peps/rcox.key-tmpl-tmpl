@@ -1,0 +1,86 @@
+# This format is free style and case insensitive.
+#
+# Use '#' to comment your key file, anything 
+# after '#' is treated as comments, i.e. ignored.
+
+#
+# A dimer excited state plus a dark state, this
+# is used to mimic the RC of Rb. S
+#
+
+# Size of the system; this has to be given at the 
+# beginning of the parameter file.
+
+NSIZE 5
+
+# Hamiltonian, notice that matrix-type input is used here
+# Also, the ground state is included, and the RWA is applied
+# |g>,P*,BL,HL,BLHL
+# We require that H exciton at 13106 and B exciton at 12453 cm-1
+# so when J=200, the bare Eb = 12521, Eh = 13037
+# RWA set E0=12121
+# so, Eb ->
+#     Eh -> 
+#     pulses are:
+#     750nm -> 1212
+#     800nm -> 379
+Hamiltonian Matrix
+      0      0       0       0	    0
+      0    200       0       0      0
+      0      0     400     200      0 
+      0      0     200     916     0
+      0      0       0       0   1316
+END
+
+
+# state 5 is two-exciton states
+# label n m
+TESLIST
+5=3,4
+END
+
+# state 2 is a sink used to mimic population transfer from B->P
+# note the indices are in exciton basis
+POPTRANS
+# from B->P in 150fs
+3 2 150.0
+END
+
+Dipole Assign
+# n->m |mu|   X     Y       Z
+1 3	0.96392	0.79	0.45	0.43
+1 4	0.76550	0.19	-0.97	-0.16
+3 5	0.76550	0.19	-0.97	-0.16
+4 5	0.96392	0.79	0.45	0.43
+END
+
+# Bath conditions;
+Beta 0.018685 # inverse temperature, 77K
+
+# Assign spectral function for each site
+Bath JS03ART
+# |n><m| Gamma Wc
+3 3	VAR_GBL	120.0
+4 4	VAR_GHL	120.0
+3 4	VAR_GHB	120.0
+END
+
+# Pulse sequence
+# E0 tau0 delta w0
+PULSESEQ
+1.0   TAU1.0 45 1212
+1.0   TAU2.0 45 1212
+1.0   TAU3.0 45 379
+END
+
+# Detection window; neglect transitions outside the
+# range from center+-width/2 
+# exp window centered at 300 cm^-1 +- 200 cm^-1
+DetWindow 300.0 400.0
+
+# Dynamics related keywords
+TSTOP 2000.0
+## 0.25 fs seems to work well; sometimes up to 1 fs is ok too.
+TSTEP 0.2
+TPRINT 5.0
+

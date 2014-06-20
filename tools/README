@@ -1,0 +1,6 @@
+This directory contains scripts and C tools that can be use to
+manipulate various data.
+
+cspline_max: use cspline interpolation to estimate maximum points.
+normalize: normalize data set so that maximum of y is 1.0.
+

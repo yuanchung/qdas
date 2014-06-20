@@ -1,0 +1,86 @@
+#
+# Dynamics and 2D spectrum of a model three state system
+#
+
+# This format is free style and case insensitive.
+#
+# Use '#' to comment your key file, anything 
+# after '#' is treated as comments, i.e. ignored.
+
+#
+# three level system
+#
+
+# Size of the system; this has to be given at the 
+# beginning of the parameter file.
+
+NSIZE 4
+
+# Hamiltonian, notice that matrix-type input is used here
+# Also, the ground state is included, and the RWA is applied
+Hamiltonian Matrix
+     0.00     0.00     0.00     0.00
+     0.00   400.00    80.00   -300.0
+     0.00    80.00   500.00     0.00
+     0.00  -300.00     0.00   700.00
+END
+
+# Tell qdas to construct two-exciton states from this
+# list of one-exciton states
+CTESLIST
+2 3 4
+END
+
+# Std. Dev. of Gaussian Static disorder
+# Diagonal energetic disorder on each site
+Disorder Assign
+2      2       70
+4      4       70
+END
+
+# How to treat static disorder average?
+# Use 50 Monte-Carlo sampling iterations
+SDMethod MC 500
+SDRSEED 2578381507
+# Use Gauss-Hermit integration using 11 point rule and minimum weight of 1e-6
+#SDMethod GH 11 1e-6
+
+# Bath conditions;
+Beta 0.018685 # inverse temperature, 77K
+
+Dipole Assign
+# n->m |mu|   X     Y       Z
+1 2 1.0 1.0	0.0	0.0
+1 3 1.0 0.0	1.0	0.0
+1 4 1.0 0.0	0.0	1.0
+END
+
+# Assign spectral function for each site
+Bath OHMART
+# |n><m| Gamma Wc
+2 2 1.0 120.0
+3 3 1.5 150.0
+4 4 1.0 120.0
+END
+
+# Pulse sequence
+# E0 tau0 delta w0
+# 40 fs pulses centered at 808nm, according to the experimental setup
+PULSESEQ
+10.0   TAU1.0 40 550.0
+10.0   TAU2.0 40 550.0
+10.0   TAU3.0 40 550.0
+END
+
+# pulse polarizations
+# all parallel pulses
+LINPOLAR 0.0 0.0 0.0 0.0
+POLMETHOD MC 100
+POLRSEED 114434545
+
+# Dynamics related keywords
+TSTOP 300.0
+TSTEP 0.2
+TPRINT 10.0
+CNCONV 1e-3
+

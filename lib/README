@@ -1,0 +1,7 @@
+Supporting functions for the QDAS package:
+
+* bath.c and bath_* implement bath modules... bath.c hides the details of
+  the bath parameter initialization from the main program.
+* bathtype implements a class of bath modules, hides details of each bath
+  modules...
+

@@ -1,0 +1,22 @@
+Files in this directory can be used as a template to setup a 3PPEPS job;
+follow the instructions below:
+
+1. modify *-tmpl file to setup your own job. Especially:
+   a. change filename prefix to reflect the nature of your job.
+   b. modify .key-tmpl file.
+   c. modify .pbs-tmpl file.
+   d. change gen_3ppes.sh, especially the JOBNAME
+   e. use run_3ppes_jobs.sh to generate a series of jobs with
+      different parameters if necessary.
+2. run gen_3ppes.sh or run_3ppes_jobs.sh to generate pbs jobscript 
+   and keyword files.
+3. submit the pbs job.
+4. after job is done, call either proc_3ppeps.sh or proc_avg3ppeps.sh
+   to process the jobs. Outputs will be saved in *dat files.
+5. proc_all_jobs.sh can be used in a upper directory to process all
+   finished jobs.
+6. update_all_figs.sh and plot_rcox.sh together can be used to generate
+   graphs for all jobs.
+7. See plot*.sh about plotting data.
+
+

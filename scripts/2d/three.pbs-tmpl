@@ -1,0 +1,76 @@
+#!/bin/bash
+### Job name
+### This PBS file uses PBS_NODEPOOL for shared cluster nodes to steal c-time
+#PBS -N JOBNAME
+#PBS -r n
+#PBS -e JOBNAME.pbserr
+#PBS -o JOBNAME.pbslog
+#PBS -q long
+#PBS -l nodes=16:ppn=2
+
+# Global vars; need to reflect your system setup
+TNL_TM3PES=$HOME/tools/tnl-dm3pes_para.sh
+PBS_NODEPOOL=$HOME/pool
+BC=$HOME/tools/bc
+
+# Normally nothing to be changed after this line
+
+echo "Job starts at:"
+date
+echo "Workdir: $PBS_O_WORKDIR"
+echo "Hostname:"
+hostname
+echo " "
+
+# in working dir
+cd $PBS_O_WORKDIR
+
+# first set free nodes
+for i in `cat $PBS_NODEFILE`
+do
+  hostname > ${i}.${RANDOM}.freenode
+done
+
+# record the number of freenodes
+NFREENODES=`ls *.freenode | wc -l`
+
+# use these nodes to run all key files
+for i in `ls -t *.key`
+do
+  nodeflag=`ls -f *.freenode ${PBS_NODEPOOL}/*.freenode 2>/dev/null | head -1`
+  until rm ${nodeflag} 2>/dev/null ;
+  do
+    # to avoid multiple runner taking the same node,
+    # we wait a random amount of time and check the availability again.
+    sleep $(echo "scale=2; $RANDOM/30000" | $BC -l)
+    nodeflag=`ls -f *.freenode ${PBS_NODEPOOL}/*.freenode 2>/dev/null | head -1`
+  done
+
+  node=`basename ${nodeflag} | sed 's/\.[0-9]*\.freenode//g'`
+  nstring=`echo ${nodeflag} | sed 's/\.[0-9]*\.freenode//g'`
+  # run job on the node taken
+  ssh -f ${node} ${TNL_TM3PES} ${nstring} $PBS_O_WORKDIR ${i}
+done
+
+# make sure the jobs are all done by counting number of freenodes
+#nfree=`ls *.freenode | wc -l`
+#while [ $nfree -lt $NFREENODES ]
+#do
+#  sleep 30
+#  nfree=`ls *.freenode | wc -l`
+#done
+
+# make sure the jobs are all done by checking *.key files
+nkey=`ls *.key 2>/dev/null | wc -l`
+while [ $nkey -gt 0 ]
+do
+  sleep 30
+  nkey=`ls *.key 2>/dev/null | wc -l`
+done
+
+# done, clean up
+rm -f *.*.freenode
+
+echo "Job ends at:"
+date
+

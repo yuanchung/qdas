@@ -1,0 +1,30 @@
+QDAS: Quantum Dynamics And Spectroscopy
+
+Calculate linear and various third-order nonlinear spectrum
+for a multilevel excitonic system using a quantum master
+equation formalism; the dynamics can be generated too.
+
+To checkout a working copy from Github:
+git clone git@github.com:yuanchung/qdas.git qdas
+
+The code uses exciton theory and non-Markovian quantum master equation 
+to simulate quantum dynamics of multilevel quantum systems. In the code, 
+the density matrix of a system is propagated using an efficient iterative 
+Crank-Nicholson propagator. In addition, the code handles multiple 
+external fields (laser pulses) and extracts third-order polarization 
+from field-dependent density matrix dynamics, which enables it to 
+simulate electronic four-wave mixing signals such as three-pulse 
+photon-echo peakshift measurements. 
+
+Shell scripts that help to setup and process 2D and 3PEPS jobs are 
+included in the "scripts/" directory. For how to simulate a 2D 
+spectrum, see scripts/2d/README .
+
+Modules:
+
+tnl-lineshape: calculates linear absorption spectrum for 
+           multilevel excitonic system including homogeneous 
+           broading and Monte-Carlo Gaussian static disorders. 
+
+tnl: Time-Nonlocal Module that contains tnl-dm3pes and tnl-dynamics
+

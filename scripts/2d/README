@@ -1,0 +1,32 @@
+Files in this directory can be used as a template to setup a 2D job;
+follow the instructions below:
+
+0. Make sure that tnl-dm3pes_para.sh and tnl-dm3pes are both installed
+   in $HOME/tools/ (or make sure to modify tnl-dm3pes_para.sh).
+1. modify *-tmpl file to setup your own job. Especially:
+   a. change filename (jobname) to reflect the nature of your job.
+   b. modify .key-tmpl file.
+   c. modify .pbs-tmpl file.
+   d. change gen_2d.sh, especially the JOBNAME
+2. run gen_2d.sh to generate pbs jobscript and keyword files:
+   ./gen_2d.sh > /dev/null
+3. submit the pbs job:
+   qsub jobname.pbs
+   The PBS job should process all .key file and generate an array of
+   out files (.out).
+4. If you are not using PBS, then take a look at submit_2d-keys.sh to see
+   how to run all tnl-dm3pes jobs.
+4. after job is done, call either proc_2d.sh or proc_2d_avg.sh
+   to process the jobs. 2dspec output will be saved in *.2d files.
+5. grep Sr= jobname.2d | tr -d "a-zA-Z=+:;,][|\\/_" > jobname-2d.dat
+6. grep Sr_norm= jobname.2d | tr -d "a-zA-Z=+:;,][|\\/_" > jobname-2d.ndat
+7. See plot*.sh about plotting 2d spectrum.
+
+if .tt file is present, use proc_tt.sh to generate 2d data files (steps 5,6).
+
+Useful scripts:
+
+  * proc_peaks.sh: use 2danalysis to calculate amplitude of peaks.
+  * proc_slices.sh: generate slices of 2d spectrum at different T,
+                    see the script for usage.
+

@@ -1,0 +1,34 @@
+tnl-dm3pes implements Domcke's density-matrix based method for
+third-order 3PPE polarization. The program also implements
+Meier and Tannor's non-Markovian propagator for dissipative
+part of the dynamics.
+
+In addition, tools for calculating 3ppeps data are included:
+
+gen_3ppes.sh: prepare a matrix of tnl-dm3pes keyword files and
+              PBS jobfiles that compute integrated signals at various
+              coherence and population times.
+
+proc_3ppeps.sh: process output of gen_3ppes.sh and generate 3PPES data.
+
+tls.*-tmpl: example template files.
+
+Example:
+
+# compute peakshifts
+./gen_3ppes.sh
+for i in *.pbs; do qsub $i; sleep 1; done
+# wait for jobs to finish
+./proc_3ppeps.sh tls
+cat tls_3ppeps.dat
+
+# plot 3D graphic representation of the PE signals in gnuplot
+set pm3d
+set isosample 40
+set contour base
+set cntrparam levels 10
+set yrange [0:200]
+splot 'tls.ndat' w l 
+
+
+

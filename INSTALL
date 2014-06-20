@@ -1,0 +1,19 @@
+Requirements:
+
+GNU Scientific Library: http://www.gnu.org/software/gsl/
+FFTW: http://www.fftw.org/
+
+Installation:
+
+1. Check lib/Makefile and src/Makefile and modify PATHs accordingly.
+2. cd lib; make clean; make
+3. cd ../src ; make clean ; make
+4. cd ../tools; make clean; make
+4. Now copy tnl-dm3pes, tnl-lineshape, and tnl-dynamics in src/
+   to a place that's accessible. For 2D job analysis, also copy
+   tools/2dspec and tools/2danalysis.
+
+Take a look at scripts/2d/README to see how to setup a 2D job.
+
+
+
